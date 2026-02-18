@@ -280,6 +280,7 @@
     <test-set name="fn-parse-uri"                       file="fn/parse-uri.xml"/>
     <test-set name="fn-partial-apply"                   file="fn/partial-apply.xml"/>
     <test-set name="fn-partition"                       file="fn/partition.xml"/>
+	<test-set name="fn-parts-of-dateTime"               file="fn/parts-of-dateTime.xml"/>
     <test-set name="fn-path"                            file="fn/path.xml"/>
     <!--<test-set name="fn-pin"                             file="fn/pin.xml"/>-->
     <test-set name="fn-position"                        file="fn/position.xml"/>
