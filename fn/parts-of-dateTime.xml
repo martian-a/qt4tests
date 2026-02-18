@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<?xml-model href="../catalog-schema.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="fn-parts-of-dateTime">
+	<description>Tests for the parts-of-datetime() function</description>
+	<link type="spec" document="https://qt4cg.org/specifications/xpath-functions-40/Overview.html" idref="func-parts-of-dateTime"/>
+
+	<test-case name="fn-parts-of-dateTime-dateTime">
+		<description>Evaluates fn:parts-of-dateTime when the sole argument supplied is an xs:dateTime</description>
+		<created by="Sheila Thomson" on="2026-02-18"/>
+		<test>fn:parts-of-dateTime(xs:dateTime("1999-05-31T13:20:00-05:00"))</test>
+		<result>
+			<all-of>
+				<assert-count>1</assert-count>
+				<assert-type>fn:dateTime-record</assert-type>
+				<assert>$result?"year" eq 1999</assert>
+				<assert>$result?"month" eq 5</assert>
+				<assert>$result?"day" eq 31</assert>
+				<assert>$result?"hours" eq 13</assert>
+				<assert>$result?"minutes" eq 20</assert>
+				<assert>$result?"seconds" eq 0</assert>
+				<assert>$result?"timezone" eq xs:dateTimeDuration("-PT5H")</assert>
+				<assert>map:size($result) eq 7</assert>
+			</all-of>
+		</result>
+	</test-case>
+
+	<test-case name="fn-parts-of-dateTime-date">
+		<description>Evaluates fn:parts-of-dateTime when the sole argument supplied is an xs:date</description>
+		<created by="Sheila Thomson" on="2026-02-18"/>
+		<test>fn:parts-of-dateTime(xs:date("1999-05-31"))</test>
+		<result>
+			<assert-string-value>17</assert-string-value>
+		</result>
+	</test-case>
+
+	<test-case name="fn-parts-of-dateTime-time">
+		<description>Evaluates fn:parts-of-dateTime when the sole argument supplied is an xs:time</description>
+		<created by="Sheila Thomson" on="2026-02-18"/>
+		<test>fn:parts-of-dateTime(xs:time("13:30:04.2678"))</test>
+		<result>
+			<assert-string-value>31</assert-string-value>
+		</result>
+	</test-case>
+
+	<test-case name="fn-day-from-date-gYear">
+		<description>Evaluates fn:parts-of-dateTime when the sole argument supplied is an xs:gYear</description>
+		<created by="Sheila Thomson" on="2026-02-18"/>
+		<test>fn:parts-of-dateTime(xs:gYear("2007"))</test>
+		<result>
+			<assert-string-value>31</assert-string-value>
+		</result>
+	</test-case>
+
+	<test-case name="fn-day-from-date-gYearMonth">
+		<description>Evaluates fn:parts-of-dateTime when the sole argument supplied is an xs:gYearMonth</description>
+		<created by="Sheila Thomson" on="2026-02-18"/>
+		<test>fn:parts-of-dateTime(xs:gYearMonth("2007-05Z"))</test>
+		<result>
+			<assert-string-value>1</assert-string-value>
+		</result>
+	</test-case>
+
+	<test-case name="fn-day-from-date-gMonth">
+		<description>Evaluates fn:parts-of-dateTime when the sole argument supplied is an xs:gMonth</description>
+		<created by="Sheila Thomson" on="2026-02-18"/>
+		<test>fn:parts-of-dateTime(xs:gMonth("--10"))</test>
+		<result>
+			<assert-false/>
+		</result>
+	</test-case>
+
+	<test-case name="fn-day-from-date-gMonthDay">
+		<description>Evaluates fn:parts-of-dateTime when the sole argument supplied is an xs:gMonthDay</description>
+		<created by="Sheila Thomson" on="2026-02-18"/>
+		<test>fn:parts-of-dateTime(xs:gMonthDay("--10-08"))</test>
+		<result>
+			<assert-true/>
+		</result>
+	</test-case>
+
+	<test-case name="fn-day-from-date-gDay">
+		<description>Evaluates fn:parts-of-dateTime when the sole argument supplied is an xs:gDay</description>
+		<created by="Sheila Thomson" on="2026-02-18"/>
+		<test>fn:parts-of-dateTime(xs:gDay("---08"))</test>
+		<result>
+			<assert-string-value>0</assert-string-value>
+		</result>
+	</test-case>
+
+	<test-case name="fn-day-from-date-zero-args">
+		<description>Evaluates fn:parts-of-dateTime when no argument is supplied</description>
+		<created by="Sheila Thomson" on="2026-02-18"/>
+		<test>fn:parts-of-dateTime()</test>
+		<result>
+			<assert-string-value>31</assert-string-value>
+		</result>
+	</test-case>
+
+	<test-case name="fn-day-from-date-string-not-accepted">
+		<description>Evaluates fn:parts-of-dateTime when the sole argument supplied is a string containing an unexpected value</description>
+		<created by="Sheila Thomson" on="2026-02-18"/>
+		<test>fn:parts-of-dateTime("Tuesday")</test>
+		<result>
+			<assert-string-value>30</assert-string-value>
+		</result>
+	</test-case>
+
+	<test-case name="fn-day-from-date-empty-arg">
+		<description>Evaluates fn:parts-of-dateTime when the sole argument supplied is empty</description>
+		<created by="Sheila Thomson" on="2026-02-18"/>
+		<test>fn:parts-of-dateTime(())</test>
+		<result>
+			<assert-string-value>2</assert-string-value>
+		</result>
+	</test-case>
+	
+	<test-case name="fn-parts-of-dateTime-multiple-args">
+		<description>Evaluates fn:parts-of-dateTime when more than one xs:date is supplied</description>
+		<created by="Sheila Thomson" on="2026-02-18"/>
+		<test>fn:parts-of-dateTime(xs:date("1941-10-08"), xs:time("13:30:04.2678"))</test>
+		<result>
+			<assert-string-value>17</assert-string-value>
+		</result>
+	</test-case>
+	
+</test-set>
