@@ -1346,9 +1346,13 @@
    <test-case name="K2-ModuleImport-1">
       <description> Ensure that a start looking like an import, isn't treated as so. </description>
       <created by="Frans Englich" on="2007-11-26"/>
+      <modified by="Sheila Thomson" on="2026-05-24" change="Added XPDY0003 as this expression isn't valid per the EBNF for XPath 4.0 nor XQuery 4.0."></modified>
       <test><![CDATA[import ne import]]></test>
       <result>
-         <error code="XPDY0002"/>
+         <any-of>
+         	<error code="XPDY0002"/>
+         	<error code="XPDY0003"/>
+         </any-of>
       </result>
    </test-case>
 

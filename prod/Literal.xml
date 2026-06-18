@@ -1598,9 +1598,13 @@ line2</assert-string-value>
    <test-case name="K2-Literals-37">
       <description> Ensure 'import' is properly parsed as a keyword. </description>
       <created by="Frans Englich" on="2008-01-03"/>
+   	<modified by="Sheila Thomson" on="2026-05-24" change="Added XPDY0003 as this expression isn't valid per the EBNF for XPath 4.0 nor XQuery 4.0."></modified>
       <test>import gt import</test>
       <result>
-         <error code="XPDY0002"/>
+         <any-of>
+         	<error code="XPDY0002"/>
+         	<error code="XPDY0003"/>
+         </any-of>      	
       </result>
    </test-case>
 
