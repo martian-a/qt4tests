@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<?xml-model href="../catalog-schema.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" 
+	name="fn-system-properties">
+
+	<description>Tests for the system-properties() function</description>
+
+	<link type="spec" 
+		document="https://qt4cg.org/specifications/xpath-functions-40/Overview.html" 
+		idref="func-system-properties"/>
+
+	<dependency type="spec" value="XP40+ XQ40+"/>
+
+	<test-case name="fn-system-properties-exists">
+		<description>Check that the function is implemented sufficiently to return something</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<test>fn:exists(fn:system-properties#0)</test>
+		<result>
+			<assert-true/>
+		</result>
+	</test-case>
+
+	<test-case name="fn-system-properties-arity-zero">
+		<description>Check that it has doesn't accept an argument</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<test>fn:system-properties#1</test>
+		<result>
+			<error code="XPST0017"/>
+		</result>
+	</test-case>
+
+	<test-case name="fn-system-properties-return-type-is-map">
+		<description>Check that the function returns a map</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<test>fn:system-properties()</test>
+		<result>
+			<assert-type>map(*)</assert-type>
+		</result>
+	</test-case>
+	
+	<test-case name="fn-system-properties-return-type-matches-signature">
+		<description>Check that the datatypes of the entries in the map match the signature in the spec.</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<test>fn:system-properties()</test>
+		<result>
+			<assert-type>map(xs:QName, xs:anyAtomicType)</assert-type>
+		</result>
+	</test-case>
+
+	<test-case name="fn-system-properties-no-duplicate-keys">
+		<description>Check there are no duplicates in the key names</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<test>let $all := fn:system-properties() return count($all) eq count(distinct-values($all)) </test>
+		<result>
+			<assert-true/>
+		</result>
+	</test-case>
+		
+	<test-case name="fn-system-properties-xpath-version-4">
+		<description>Check that the XPath version is 4.0</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<dependency type="spec" value="XP40 XQ40"/>
+		<test>fn:system-properties()?#xpath-version</test>
+		<result>
+			<all-of>
+				<assert-type>xs:decimal</assert-type>
+				<assert>$result eq 4.0</assert>
+			</all-of>
+		</result>
+	</test-case>
+	
+	<test-case name="fn-system-properties-xsd-version-10">
+		<description>Check that the XSD version is 1.0</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<dependency type="xsd-version" value="1.0"/>
+		<test>fn:system-properties()?#xsd-version</test>
+		<result>
+			<all-of>
+				<assert-type>xs:decimal</assert-type>
+				<assert>$result eq 1.0</assert>
+			</all-of>
+		</result>
+	</test-case>
+	
+	<test-case name="fn-system-properties-xsd-version-11">
+		<description>Check that the XSD version is 1.1</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<dependency type="xsd-version" value="1.1"/>
+		<test>fn:system-properties()?#xsd-version</test>
+		<result>
+			<all-of>
+				<assert-type>xs:decimal</assert-type>
+				<assert>$result eq 1.1</assert>
+			</all-of>
+		</result>
+	</test-case>
+	
+	<test-case name="fn-system-properties-product-name">
+		<description>Check that the product name is a non-empty string</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<test>fn:system-properties()?#product-name</test>
+		<result>
+			<all-of>
+				<assert-type>xs:string</assert-type>
+				<assert>not(empty($result))</assert>
+			</all-of>
+		</result>
+	</test-case>
+	
+	<test-case name="fn-system-properties-product-version">
+		<description>Check that the product version is a non-empty string</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<test>fn:system-properties()?#product-version</test>
+		<result>
+			<all-of>
+				<assert-type>xs:string</assert-type>
+				<assert>not(empty($result))</assert>
+			</all-of>
+		</result>
+	</test-case>
+		
+	<test-case name="fn-system-properties-schema-aware">
+		<description>Check that the schema-aware is set to true if the processor supports this feature</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<dependency type="schemaAware" value="true"/>
+		<test>fn:system-properties()?#schema-aware</test>
+		<result>
+			<assert-true />
+		</result>
+	</test-case>
+	
+	<test-case name="fn-system-properties-not-schema-aware">
+		<description>Check that the schema-aware is set to false if the processor doesn't support this feature</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<dependency type="schemaAware" value="false"/>
+		<test>fn:system-properties()?#schema-aware</test>
+		<result>
+			<assert-false />
+		</result>
+	</test-case>
+	
+	<test-case name="fn-system-properties-accepts-typed-data">
+		<description>Check that the schema-aware is set to true if the processor supports this feature</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<dependency type="feature" value="typedData"/>
+		<test>fn:system-properties()?#accepts-typed-data</test>
+		<result>
+			<assert-true />
+		</result>
+	</test-case>
+	
+	<test-case name="fn-system-properties-accepts-typed-data-false">
+		<description>Check that the schema-aware is set to true if the processor supports this feature</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<dependency type="feature" value="typedData" satisfied="false" />
+		<test>fn:system-properties()?#accepts-typed-data</test>
+		<result>
+			<assert-false />
+		</result>
+	</test-case>
+	
+	
+	<test-case name="fn-system-properties-supports-xinclude">
+		<description>Check that the supports-xinclude is set to true if the processor supports this feature</description>
+		<created by="Sheila Thomson" on="2026-06-11"/>
+		<dependency type="feature" value="xinclude"/>
+		<test>fn:system-properties()?#supports-xinclude</test>
+		<result>
+			<assert-true />
+		</result>
+	</test-case>
+	
+</test-set>
