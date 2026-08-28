@@ -8,7 +8,14 @@
 		document="https://qt4cg.org/specifications/xpath-functions-40/Overview.html" 
 		idref="func-system-properties"/>
 
-	<dependency type="spec" value="XP40+ XQ40+"/>
+	<dependency type="spec" value="XP40+"/>
+	
+	<environment name="fn-system-properties-supports-dtd">
+		<source role="." file="system-properties/supports-dtd.xml">
+			<description>A DTD validated XML file that includes examples of ID and IDREF attributes and an entity that requires expansion.</description>
+			<created by="Sheila Thomson" on="2026-08-26" />
+		</source>
+	</environment>
 
 	<test-case name="fn-system-properties-exists">
 		<description>Check that the function is implemented sufficiently to return something</description>
@@ -49,7 +56,7 @@
 	<test-case name="fn-system-properties-no-duplicate-keys">
 		<description>Check there are no duplicates in the key names</description>
 		<created by="Sheila Thomson" on="2026-06-11"/>
-		<test>let $all := fn:system-properties() return count($all) eq count(distinct-values($all)) </test>
+		<test>let $all := map:keys(fn:system-properties()) return count($all) eq count(distinct-values($all)) </test>
 		<result>
 			<assert-true/>
 		</result>
@@ -58,7 +65,7 @@
 	<test-case name="fn-system-properties-xpath-version-4">
 		<description>Check that the XPath version is 4.0</description>
 		<created by="Sheila Thomson" on="2026-06-11"/>
-		<dependency type="spec" value="XP40 XQ40"/>
+		<dependency type="spec" value="XP40"/>
 		<test>fn:system-properties()?#xpath-version</test>
 		<result>
 			<all-of>
@@ -262,8 +269,7 @@
 		<description>Check that supports-dtd is set to true if the processor FULLY supports validation, entity expansion and attribute typing based on DTD processing during XML parsing.</description>
 		<created by="Sheila Thomson" on="2026-06-11"/>
 		<dependency type="feature" value="dtd-validation"/>
-		<dependency type="feature" value="dtd-entity-expansion"/>
-		<dependency type="feature" value="dtd-attribute-typing"/>
+		<dependency type="feature" value="infoset-dtd"/>
 		<test>fn:system-properties()?#supports-dtd</test>
 		<result>
 			<assert-true />
@@ -271,7 +277,7 @@
 	</test-case>
 	
 	<test-case name="fn-system-properties-supports-dtd-no-validation">
-		<description>Check that supports-dtd is set to true if the processor doesn't fully support DTD validation.</description>
+		<description>Check that supports-dtd is not set to true if the processor doesn't fully support DTD validation.</description>
 		<created by="Sheila Thomson" on="2026-08-21"/>
 		<dependency type="feature" value="dtd-validation" satisfied="false" />
 		<test>fn:system-properties()?#supports-dtd</test>
@@ -281,22 +287,29 @@
 	</test-case>
 	
 	<test-case name="fn-system-properties-supports-dtd-no-entity-expansion">
-		<description>Check that supports-dtd is set to true if the processor doesn't fully support DTD entity expansion.</description>
+		<description>Check that supports-dtd is not set to true if the processor doesn't fully support DTD entity expansion.</description>
 		<created by="Sheila Thomson" on="2026-08-21"/>
-		<dependency type="feature" value="dtd-entity-expansion" satisfied="false" />
+		<dependency type="feature" value="infoset-dtd" satisfied="false" />
 		<test>fn:system-properties()?#supports-dtd</test>
 		<result>
 			<assert-false />
 		</result>
-	</test-case>
+	</test-case>	
 	
-	<test-case name="fn-system-properties-supports-dtd-no-attribute-typing">
-		<description>Check that supports-dtd is set to true if the processor doesn't fully support attribute typing based on DTD processing during XML parsing.</description>
+	<test-case name="fn-system-properties-supports-dtd-verified">
+		<description>Check that supports-dtd is set to true if the processor fully supports DTD validation, entity expansion and attribute typing.</description>
 		<created by="Sheila Thomson" on="2026-08-21"/>
-		<dependency type="feature" value="dtd-attribute-typing" satisfied="false" />
-		<test>fn:system-properties()?#supports-dtd</test>
+		<dependency type="feature" value="dtd-validation" satisfied="true" />
+		<dependency type="feature" value="infoset-dtd" satisfied="true" />
+		<environment ref="fn-system-properties-supports-dtd"/>
+		<test>distinct-values((
+				fn:system-properties()?#supports-dtd, 
+				/employees/employee[1]/motto = 'Strengthened through the challenge',
+				fn:idref("E21256")/parent::employee/first = 'Anila',
+				fn:doc('system-properties/supports-dtd.xml', {'dtd-validation' : true()})
+			))</test>
 		<result>
-			<assert-false />
+			<assert-true />
 		</result>
 	</test-case>
 	
